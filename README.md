@@ -3,6 +3,7 @@ This repository manages a collection of AI tool packages designed for use with O
 
 Oasis introduces a framework that allows AI to access tools via UBUS, the core messaging system of the OpenWrt ecosystem.
 By writing scripts that follow the framework’s defined rules, developers can make tool definitions understandable and usable by AI through Oasis
+
 Detail: https://github.com/utakamo/oasis/tree/main/oasis-mod-tool
 
 # 🚀Prerequisite: Install oasis
