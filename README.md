@@ -22,3 +22,11 @@ wget -O - https://raw.githubusercontent.com/utakamo/oasis/refs/heads/main/oasis_
 > root@OpenWrt:~# date
 > root@OpenWrt:~# /etc/init.d/sysntpd restart
 > ```
+
+# 🛠️oasis-tool-template
+his tool package serves as a template for defining AI tools used with Oasis
+
+## Install:  
+```
+opkg install oasis-tool-template_1.0.0-r1_all.ipk
+```
