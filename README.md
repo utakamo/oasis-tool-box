@@ -25,7 +25,7 @@ wget -O - https://raw.githubusercontent.com/utakamo/oasis/refs/heads/main/oasis_
 > ```
 
 # 🛠️oasis-tool-template
-his tool package serves as a template for defining AI tools used with Oasis
+This tool package serves as a template for defining AI tools used with Oasis
 
 ## How to build & Upload 
 develop enviroment ex: `Ubuntu / OpenWrt Buildroot`
