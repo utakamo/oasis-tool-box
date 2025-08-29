@@ -34,4 +34,6 @@ opkg install oasis-tool-template_1.0.0-r1_all.ipk
 <img width="947" height="439" alt="image" src="https://github.com/user-attachments/assets/64dc5250-266f-4e4f-b0f6-f89a987b0e90" />
 <img width="947" height="439" alt="image" src="https://github.com/user-attachments/assets/3af40cee-db26-4ae3-9621-4d40f966470e" />
 
+# Tool Use
+<img width="944" height="438" alt="image" src="https://github.com/user-attachments/assets/610b94b8-3adf-4580-9a77-3e955c8ba7af" />
 
