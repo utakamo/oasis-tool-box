@@ -28,7 +28,8 @@ his tool package serves as a template for defining AI tools used with Oasis
 
 ## Install:  
 ```
-opkg install oasis-tool-template_1.0.0-r1_all.ipk
+root@OpenWrt:~# opkg install oasis-tool-template_1.0.0-r1_all.ipk
+root@OpenWrt:~# reboot
 ```
 ## Template Tools
 <img width="947" height="439" alt="image" src="https://github.com/user-attachments/assets/64dc5250-266f-4e4f-b0f6-f89a987b0e90" />
