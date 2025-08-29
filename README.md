@@ -26,8 +26,14 @@ wget -O - https://raw.githubusercontent.com/utakamo/oasis/refs/heads/main/oasis_
 # 🛠️oasis-tool-template
 his tool package serves as a template for defining AI tools used with Oasis
 
-## How to build (develop enviroment ex: Ubuntu / OpenWrt Buildroot)
-1. `user@user:~$ echo src-git `
+## How to build & Upload (develop enviroment ex: Ubuntu / OpenWrt Buildroot)
+1. `user@user:~/openwrt$ echo "src-git tools https://github.com/utakamo/oasis-tool-box.git" >> feeds.conf`
+2. `user@user:~/openwrt$ ./scripts/feeds update tools`
+3. `user@user:~/openwrt$ ./scripts/feeds install -a -p tools`
+4. `user@user:~/openwrt$ make menuconfig`
+5. Check oasis-tool-template [Category: utakamo]
+6. `user@user:~/openwrt$ make package/oasis-tool-template/compile`
+7. `user@user:~/openwrt$ scp ./bin/packages/<target architecture>/tools/oasis-tool-template_1.0.0-r1_all.ipk root@192.168.1.1:/root`
 
 ## Install:  
 ```
