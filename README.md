@@ -30,3 +30,8 @@ his tool package serves as a template for defining AI tools used with Oasis
 ```
 opkg install oasis-tool-template_1.0.0-r1_all.ipk
 ```
+## Template Tools
+<img width="947" height="439" alt="image" src="https://github.com/user-attachments/assets/64dc5250-266f-4e4f-b0f6-f89a987b0e90" />
+<img width="947" height="439" alt="image" src="https://github.com/user-attachments/assets/3af40cee-db26-4ae3-9621-4d40f966470e" />
+
+
