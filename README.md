@@ -49,3 +49,7 @@ root@OpenWrt:~# reboot
 # Tool Use
 <img width="944" height="438" alt="image" src="https://github.com/user-attachments/assets/610b94b8-3adf-4580-9a77-3e955c8ba7af" />
 
+# 🛠️oasis-tool-for-developper
+AI operate mtd device, gpio control, and so on.
+under development ...
+
