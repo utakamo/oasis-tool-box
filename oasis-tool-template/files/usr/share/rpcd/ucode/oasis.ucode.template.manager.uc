@@ -3,14 +3,14 @@
 let ubus = require('ubus').connect();
 let server = require('oasis.local.tool.server');
 
-server.tool("oasis.ucode.tool.template", "get_goodbye", {
+server.tool("oasis.ucode.template.tool1", "get_goodbye", {
     tool_desc: "Return a fixed goodbye message.",
     call: function() {
         return { message: "Goodbye! This is a template tool." };
     }
 });
 
-server.tool("oasis.ucode.tool.template", "subtract", {
+server.tool("oasis.ucode.template.tool1", "subtract", {
     tool_desc: "Subtract the second number from the first and return the result.",
     args_desc: [
         "First number (integer)",
@@ -21,13 +21,13 @@ server.tool("oasis.ucode.tool.template", "subtract", {
         num2: 0
     },
     call: function(request) {
-        let a = Number(request.args.num1) || 0;
-        let b = Number(request.args.num2) || 0;
+        let a = request.args.num1
+        let b = request.args.num2
         return { num1: a, num2: b, difference: a - b };
     }
 });
 
-server.tool("oasis.ucode.tool.template", "concat_strings", {
+server.tool("oasis.ucode.template.tool2", "concat_strings", {
     tool_desc: "Concatenate two strings and return the result.",
     args_desc: [
         "First string",
