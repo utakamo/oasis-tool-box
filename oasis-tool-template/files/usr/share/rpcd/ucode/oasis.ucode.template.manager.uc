@@ -21,8 +21,8 @@ server.tool("oasis.ucode.template.tool1", "subtract", {
         num2: 0
     },
     call: function(request) {
-        let a = request.args.num1
-        let b = request.args.num2
+        let a = request.args.num1;
+        let b = request.args.num2;
         return { num1: a, num2: b, difference: a - b };
     }
 });
