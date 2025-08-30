@@ -1,4 +1,4 @@
-# Oasis Local Tool Box
+# Oasis Tool Box
 This repository manages a collection of AI tool packages designed for use with Oasis, an AI assistant tool I’m developing specifically for OpenWrt.    
 
 Oasis introduces a framework that allows AI to access tools via UBUS, the core messaging system of the OpenWrt ecosystem.
