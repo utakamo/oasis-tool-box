@@ -3,7 +3,6 @@
 let ubus = require('ubus').connect();
 let server = require('oasis.local.tool.server');
 
-// --- 引数なしテンプレート ---
 server.tool("oasis.ucode.tool.template", "get_goodbye", {
     tool_desc: "Return a fixed goodbye message.",
     call: function() {
@@ -11,7 +10,6 @@ server.tool("oasis.ucode.tool.template", "get_goodbye", {
     }
 });
 
-// --- 2引数数値計算テンプレート（引き算） ---
 server.tool("oasis.ucode.tool.template", "subtract", {
     tool_desc: "Subtract the second number from the first and return the result.",
     args_desc: [
@@ -29,7 +27,6 @@ server.tool("oasis.ucode.tool.template", "subtract", {
     }
 });
 
-// --- 2引数文字列テンプレート ---
 server.tool("oasis.ucode.tool.template", "concat_strings", {
     tool_desc: "Concatenate two strings and return the result.",
     args_desc: [
