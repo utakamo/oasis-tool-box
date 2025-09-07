@@ -21,7 +21,7 @@ endef
 
 define Package/oasis-tool-analysis/install
 	$(INSTALL_DIR) $(1)$(LUA_OLT_SERVER_DIR)
-	$(INSTALL_BIN) ./files/usr/libexec/rpcd/analysis.tool $(1)$(LUA_OLT_SERVER_DIR)
+	$(INSTALL_BIN) ./files/usr/libexec/rpcd/gpio.tool.server $(1)$(LUA_OLT_SERVER_DIR)
 endef
 
 $(eval $(call BuildPackage,oasis-tool-analysis))
