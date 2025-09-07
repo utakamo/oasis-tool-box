@@ -1,0 +1,32 @@
+#!/usr/bin/env lua
+
+local server = require("oasis.local.tool.server")
+
+server.tool("gpioinfo", {
+    tool_desc = "List the status and configuration details of each GPIO line associated with the specified GPIO chip.",
+    call = function()
+        local util = require("luci.util")
+        local info = util.exec("gpioinfo")
+        local res = server.response({ result = info, request = "Display it in a table format using Markdown." })
+        return res
+    end
+})
+
+server.tool("xxxxxx", {
+    tool_desc = "xxxxxxx",
+
+    args_desc = {
+        "argument 1 description",
+        "argument 2 description",
+    },
+
+    args = { arg1 = "a_string", arg2 = "a_string" },
+
+    call = function(args)
+        -- something process
+        local res = server.response({ result = "xxxxxx" })
+        return res
+    end
+})
+
+server.run(arg)
