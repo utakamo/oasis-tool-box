@@ -30,7 +30,7 @@ server.tool("tool_test_C", {
 server.tool("tool_test_D", {
     tool_desc   = "This is Test D",
     exec_msg = "Execute Test D",
-    download_msg = "Downloading Test ... "
+    download_msg = "Downloading Test ... ",
     call = function()
         local util = require("luci.util")
         util.exec("sleep 10")
