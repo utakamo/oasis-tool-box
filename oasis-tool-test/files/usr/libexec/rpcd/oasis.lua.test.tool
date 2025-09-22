@@ -60,4 +60,12 @@ server.tool("tool_test_F", {
     end
 })
 
+server.tool("tool_test_G", {
+    tool_desc   = "This is Test G",
+    call = function()
+        local util = require("luci.util")
+        return server.response({ messasge = "Executed Test G.", user_only = "This is user only message." })
+    end
+})
+
 server.run(arg)
