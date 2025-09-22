@@ -19,7 +19,7 @@ server.tool("tool_test_B", {
 
 server.tool("tool_test_C", {
     tool_desc   = "This is Test C",
-    download_msg = "Downloading Test ... "
+    download_msg = "Downloading Test ... ",
     call = function(args)
         local util = require("luci.util")
         util.exec("sleep 10")
