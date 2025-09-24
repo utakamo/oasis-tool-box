@@ -41,8 +41,12 @@ server.tool("install_wireguard", {
             return server.response({ error = "Failed to install " .. package .. " package." })
         end
 
-        local res = server.response({ result = "The package has been installed successfully." })
-        return res
+        return server.response(
+            {
+                result = "The package has been installed successfully.",
+                request = "Please inform the user that a system reboot is required after installing WireGuard.",
+            }
+        )
     end
 })
 
