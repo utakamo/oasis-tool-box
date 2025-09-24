@@ -6,7 +6,7 @@ By writing scripts that follow the framework’s defined rules, developers can m
 
 Detail: https://github.com/utakamo/oasis/tree/main/oasis-mod-tool
 
-# 🚀Prerequisite: Install oasis (Latest Ver: v3.1.2)
+# 🚀Prerequisite: Install oasis (Latest Ver: v3.2.0)
 
 |  Detail  |         description       |
 | :---: | :---  |
