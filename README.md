@@ -53,3 +53,7 @@ root@OpenWrt:~# reboot
 To analyze OpenWrt devices, the AI performs operations on MTD devices, controls GPIOs, and more.  
 under development ...
 
+# 🛠️oasis-tool-wireguard
+WireGuard Auto Setup Tool
+under development ...
+
