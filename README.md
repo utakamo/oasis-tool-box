@@ -49,6 +49,9 @@ root@OpenWrt:~# reboot
 # Tool Use
 <img width="944" height="438" alt="image" src="https://github.com/user-attachments/assets/610b94b8-3adf-4580-9a77-3e955c8ba7af" />
 
+# 🛠️oasis-tool-test
+AI Tool Test For Oasis  
+
 # 🛠️oasis-tool-analysis
 To analyze OpenWrt devices, the AI performs operations on MTD devices, controls GPIOs, and more.  
 under development ...
