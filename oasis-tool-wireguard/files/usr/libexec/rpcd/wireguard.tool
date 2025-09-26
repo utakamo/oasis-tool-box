@@ -24,13 +24,16 @@ server.tool("wireguard_user_manual", {
 server.tool("install_wireguard", {
     tool_desc = "Install luci-proto-wireguard package",
     download_msg = "Downloading The WireGuard Package",
-    reboot = true,
     call = function()
         local package = "luci-proto-wireguard"
         local mgr = require("oasis.local.tool.package.manager")
 
         if mgr.check_installed_pkg(package) then
-            return server.response({ result = "The WireGuard package (" .. package .. ") is already installed." })
+            return server.response(
+                { 
+                    result = "The WireGuard package (" .. package .. ") is already installed.",
+                    reboot = true,
+                })
         end
 
         if not mgr.update_pkg_info("ipk") then
