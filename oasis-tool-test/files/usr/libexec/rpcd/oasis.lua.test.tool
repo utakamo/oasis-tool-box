@@ -40,23 +40,21 @@ server.tool("tool_test_D", {
 
 server.tool("tool_test_E", {
     tool_desc   = "This is Test E",
-    reboot = true,
     call = function()
         local util = require("luci.util")
         util.exec("sleep 10")
-        return server.response({ messasge = "Executed Test E." })
+        return server.response({ messasge = "Executed Test E.", reboot = true })
     end
 })
 
 server.tool("tool_test_F", {
     tool_desc   = "This is Test F",
-    reboot = true,
     exec_msg = "Executed Test F",
     download_msg = "Downloading Test ...",
     call = function()
         local util = require("luci.util")
         util.exec("sleep 10")
-        return server.response({ messasge = "Executed Test F." })
+        return server.response({ messasge = "Executed Test F.", reboot = true })
     end
 })
 

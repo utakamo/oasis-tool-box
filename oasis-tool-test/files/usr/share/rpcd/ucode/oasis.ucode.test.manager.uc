@@ -37,30 +37,27 @@ server.tool("oasis.ucode.test.tool", "tool_test_K", {
 
 server.tool("oasis.ucode.test.tool", "tool_test_L", {
     tool_desc: "This is test L.",
-    reboot: true,
     call: function() {
-        return { message: "Execute Test L." };
+        return { message: "Execute Test L.", reboot: true };
     }
 });
 
 server.tool("oasis.ucode.test.tool", "tool_test_M", {
     tool_desc: "This is test M.",
-    reboot: true,
     exec_msg: "Execute Test M",
     download_msg: "Downloading Test ...",
     call: function() {
-        return { message: "Execute Test L." };
+        return { message: "Execute Test L.", reboot: true };
     }
 });
 
 
 server.tool("oasis.ucode.test.tool", "tool_test_N", {
     tool_desc: "This is test N.",
-    reboot: true,
     exec_msg: "Execute Test N",
     download_msg: "Downloading Test ...",
     call: function() {
-        return { message: "Execute Test N.", user_only: "This is user only message." };
+        return { message: "Execute Test N.", user_only: "This is user only message.", reboot: true };
     }
 });
 
