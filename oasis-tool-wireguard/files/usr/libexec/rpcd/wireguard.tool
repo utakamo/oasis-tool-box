@@ -53,16 +53,6 @@ server.tool("install_wireguard", {
     end
 })
 
-server.tool("reboot_after_wireguard_install", {
-    tool_desc = "Reboot the system after installing WireGuard.",
-    call = function()
-        local util = require("luci.util")
-        system_reboot_after_15sec()
-        local res = server.response({ request = "The system will reboot in 5-10 seconds." })
-        return res
-    end
-})
-
 server.tool("xxxxx", {
     args_desc   = { "xxxxxxxxxxxxxxxxx" },
     args        = { data = "xxxxxxxxx" },
