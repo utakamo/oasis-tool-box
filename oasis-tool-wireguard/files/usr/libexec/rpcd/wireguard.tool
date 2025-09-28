@@ -23,7 +23,8 @@ server.tool("wireguard_user_manual", {
 
 server.tool("install_wireguard", {
     tool_desc = "Install luci-proto-wireguard package",
-    download_msg = "Downloading The WireGuard Package",
+    exec_msg = "Installing WireGuard Package. Please Wait ...",
+    download_msg = "Installing The WireGuard Package",
     call = function()
         local package = "luci-proto-wireguard"
         local mgr = require("oasis.local.tool.package.manager")
@@ -48,6 +49,7 @@ server.tool("install_wireguard", {
             {
                 result = "The package has been installed successfully.",
                 request = "Please inform the user that a system reboot is required after installing WireGuard.",
+                reboot = true,
             }
         )
     end
