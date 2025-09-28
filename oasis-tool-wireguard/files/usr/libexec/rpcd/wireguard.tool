@@ -33,7 +33,6 @@ server.tool("install_wireguard", {
             return server.response(
                 { 
                     result = "The WireGuard package (" .. package .. ") is already installed.",
-                    reboot = true,
                 })
         end
 
