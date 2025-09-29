@@ -13,7 +13,7 @@ server.tool("wireguard_user_manual", {
                 -- Preparation
                 "Step 1: \nUse the tool named \"install_wireguard_package\" to install wireguard package.\n\n" ..
                 -- Key Management
-                "Step 2: \nUse the tool named \"generate_wireguard_keys" to generate wireguard private and pre-shared, public key. \n\n" ..
+                "Step 2: \nUse the tool named \"generate_wireguard_keys\" to generate wireguard private and pre-shared, public key. \n\n" ..
                 -- Firewall
                 "Step 3: \nUse the tool named \"setup_firewall_for_wireguard\" to \n\n" ..
                 -- Network
@@ -116,9 +116,15 @@ server.tool("generate_wireguard_keys", {
         user_only = user_only .. "- WireGuard Pre-shared Key\n"
         user_only = user_only .. "```\n" .. pre_shared_key .. "\n```" 
 
-        os.execute("umask -go && echo " .. server_public_key .. " > /tmp/oasis/wireguard_server_public_key")
-        os.execute("umask -go && echo " .. client_public_key .. " > /tmp/oasis/wireguard_client_public_key")
-        os.execute("umask -go && echo " .. pre_shared_key .. " > /tmp/oasis/wireguard_pre_shared_key")
+        -- generate key file for other tool use
+        misc.write_file("/tmp/oasis/wireguard_server_public_key", server_public_key)
+        misc.write_file("/tmp/oasis/wireguard_client_public_key", client_public_key)
+        misc.write_file("/tmp/oasis/wireguard_pre_shared_key", pre_shared_key)
+
+        -- permission: 600
+        os.execute("chmod 600 /tmp/oasis/wireguard_server_public_key")
+        os.execute("chmod 600 /tmp/oasis/wireguard_client_public_key")
+        os.execute("chmod 600 /tmp/oasis/wireguard_pre_shared_key")
 
         return server.response(
             {
@@ -167,7 +173,7 @@ server.tool("setup_firewall_for_wireguard", {
         -- del_list
         local lan_list = uci:get_list("firewall", "lan", "network")
 
-        for idx, val in ipairs(lan_list) docs
+        for idx, val in ipairs(lan_list) do
             if val == args.vpn then
                 table.remove(lan_list, idx)
             end
