@@ -106,7 +106,7 @@ server.tool("generate_wireguard_keys", {
 
         local server_public_key = util.exec("wg genkey"):gsub("\n$", "")
         local client_public_key = util.exec("wg genkey"):gsub("\n$", "")
-        local pre_shared_key = util.exec("wg genkey"):gsub("\n$", "")
+        local pre_shared_key = util.exec("wg genpsk"):gsub("\n$", "")
         local user_only = "Generate Key Success\n\n"
         user_only = user_only .. "Memo below keys.\n"
         user_only = user_only .. "- WireGuard Server Public Key\n"
@@ -201,6 +201,9 @@ server.tool("setup_firewall_for_wireguard", {
     end
 })
 
+-- Network
+-- Reference URL:
+-- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server?s%5B%5D=wireguard&s%5B%5D=vpn#network
 server.tool("setup_wireguard_network", {
     args_desc   = { "xxxxxxxxxxxxxxxxx" },
     args        = { data = "xxxxxxxxx" },
