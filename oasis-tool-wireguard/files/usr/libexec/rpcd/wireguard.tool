@@ -104,8 +104,10 @@ server.tool("generate_wireguard_keys", {
             )
         end
 
-        local server_public_key = util.exec("wg genkey"):gsub("\n$", "")
-        local client_public_key = util.exec("wg genkey"):gsub("\n$", "")
+        local server_public_key = util.exec("wg pubkey"):gsub("\n$", "")
+        local server_secret_key = util.exec("wg genkey"):gsub("\n$", "")
+        local client_public_key = util.exec("wg pubkey"):gsub("\n$", "")
+        local client_secret_key = util.exec("wg genkey"):gsub("\n$", "")
         local pre_shared_key = util.exec("wg genpsk"):gsub("\n$", "")
         local user_only = "Generate Key Success\n\n"
         user_only = user_only .. "Memo below keys.\n"
@@ -117,14 +119,24 @@ server.tool("generate_wireguard_keys", {
         user_only = user_only .. "```\n" .. pre_shared_key .. "\n```" 
 
         -- generate key file for other tool use
+
+        -- Public Key
         misc.write_file("/tmp/oasis/wireguard_server_public_key", server_public_key)
         misc.write_file("/tmp/oasis/wireguard_client_public_key", client_public_key)
+
+        -- Secret Key
+        misc.write_file("/tmp/oasis/wireguard_server_secret_key", server_secret_key)
+        misc.write_file("/tmp/oasis/wireguard_client_secret_key", client_secret_key)
+
+        -- Pre-Shared Key
         misc.write_file("/tmp/oasis/wireguard_pre_shared_key", pre_shared_key)
 
         -- permission: 600
         os.execute("chmod 600 /tmp/oasis/wireguard_server_public_key")
         os.execute("chmod 600 /tmp/oasis/wireguard_client_public_key")
         os.execute("chmod 600 /tmp/oasis/wireguard_pre_shared_key")
+        os.execute("chmod 600 /tmp/oasis/wireguard_secret_public_key")
+        os.execute("chmod 600 /tmp/oasis/wireguard_secret_public_key")
 
         return server.response(
             {
