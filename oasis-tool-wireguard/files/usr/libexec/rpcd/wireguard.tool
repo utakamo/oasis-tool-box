@@ -103,11 +103,14 @@ server.tool("generate_wireguard_keys", {
             )
         end
 
-        local server_public_key = util.exec("wg pubkey"):gsub("\n$", "")
         local server_private_key = util.exec("wg genkey"):gsub("\n$", "")
-        local client_public_key = util.exec("wg pubkey"):gsub("\n$", "")
+        local server_public_key  = util.exec("echo " .. server_private_key .. " | wg pubkey"):gsub("\n$", "")
+
         local client_private_key = util.exec("wg genkey"):gsub("\n$", "")
+        local client_public_key  = util.exec("echo " .. client_private_key .. " | wg pubkey"):gsub("\n$", "")
+
         local pre_shared_key = util.exec("wg genpsk"):gsub("\n$", "")
+
         local user_only = "Generate Key Success\n\n"
         user_only = user_only .. "Memo below keys.\n"
         user_only = user_only .. "- WireGuard Server Public Key\n"
@@ -239,9 +242,13 @@ server.tool("setup_wireguard_network", {
         local uci  = require("luci.model.uci").cursor()
         local misc = require("oasis.chat.misc")
 
-        local private_key = misc.read_file("/tmp/oasis/wireguard_server_private_key")
-        local peer_pubkey = misc.read_file("/tmp/oasis/wireguard_client_public_key")
-        local peer_psk    = misc.read_file("/tmp/oasis/wireguard_pre_shared_key")
+        local server_private_key_file = "/tmp/oasis/wireguard_server_private_key"
+        local client_public_key_file  = "/tmp/oasis/wireguard_client_public_key"
+        local pre_shared_key_file     = "/tmp/oasis/wireguard_pre_shared_key"
+
+        local private_key = misc.read_file(server_private_key_file)
+        local peer_pubkey = misc.read_file(client_public_key_file)
+        local peer_psk    = misc.read_file(pre_shared_key_file)
 
         if not private_key or private_key == "" then
             return server.response({ error = "Private key not found: " .. server_private_key_file })
