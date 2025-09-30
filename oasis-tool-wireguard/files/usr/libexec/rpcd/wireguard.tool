@@ -8,21 +8,20 @@ local server = require("oasis.local.tool.server")
 server.tool("wireguard_user_manual", {
     tool_desc   = "Read the instructions for setting up WireGuard.",
     call = function()
-        local res = server.response({
+        return server.response({
             install_and_setup_manual = {
                 -- Preparation
                 "Step 1: \nUse the tool named \"install_wireguard_package\" to install wireguard package.\n\n" ..
                 -- Key Management
-                "Step 2: \nUse the tool named \"generate_wireguard_keys\" to generate wireguard private and pre-shared, public key. \n\n" ..
+                "Step 2: \nUse the tool named \"generate_wireguard_keys\" to generate wireguard private, public, and pre-shared keys.\n\n" ..
                 -- Firewall
-                "Step 3: \nUse the tool named \"setup_firewall_for_wireguard\" to \n\n" ..
+                "Step 3: \nUse the tool named \"setup_firewall_for_wireguard\" to configure the firewall so that UDP traffic to the WireGuard port is accepted and the virtual interface is included in the LAN zone.\n\n" ..
                 -- Network
-                "Step 4: \n" ..
+                "Step 4: \nUse the tool named \"setup_wireguard_network\" to create the WireGuard network interface (VPN_IF) with IPv4 (VPN_ADDR) and IPv6 (VPN_ADDR6) addresses, and register the peer configuration (public key, preshared key, allowed IPs).\n\n"
             },
 
             note = "If you're not aware of the tools required for each step, please ask the user to enable the relevant tools from the Tools tab."
         })
-        return res
     end
 })
 
@@ -32,7 +31,7 @@ server.tool("wireguard_user_manual", {
 server.tool("install_wireguard", {
     tool_desc = "Install wireguard package (wireguard-tools or luci-proto-wireguard package)",
     args_desc = {
-        "Set package type value [CLI Type (wireguard-tools) value: \"0\", WebUI Type (luci-proto-wireguard) value: \"1\"]",
+        "Set package type value [CLI Type (wireguard-tools) value: '0', WebUI Type (luci-proto-wireguard) value: '1']",
     },
     args = { pkg_type = "a_string"},
     exec_msg = "Installing WireGuard Package. Please Wait ...",
@@ -48,13 +47,13 @@ server.tool("install_wireguard", {
             package = "wireguard-tools"
         elseif args.pkg_type == "1" then
             package = "luci-proto-wireguard"
-            request = "Please inform the user that a system reboot is required after installing WireGuard.",
+            request = "Please inform the user that a system reboot is required after installing WireGuard."
             reboot = true
         else
             return server.response(
                 {
-                    error = "Mismatch argument value.",
-                    caution = "You must select CLI Ver:\"0\" or WebUI Ver:\"1\". ",
+                    error = "Invalid pkg_type value.",
+                    caution = "You must select CLI Ver:'0' or WebUI Ver:'1'. ",
                 }
             )
         end
@@ -105,9 +104,9 @@ server.tool("generate_wireguard_keys", {
         end
 
         local server_public_key = util.exec("wg pubkey"):gsub("\n$", "")
-        local server_secret_key = util.exec("wg genkey"):gsub("\n$", "")
+        local server_private_key = util.exec("wg genkey"):gsub("\n$", "")
         local client_public_key = util.exec("wg pubkey"):gsub("\n$", "")
-        local client_secret_key = util.exec("wg genkey"):gsub("\n$", "")
+        local client_private_key = util.exec("wg genkey"):gsub("\n$", "")
         local pre_shared_key = util.exec("wg genpsk"):gsub("\n$", "")
         local user_only = "Generate Key Success\n\n"
         user_only = user_only .. "Memo below keys.\n"
@@ -124,9 +123,9 @@ server.tool("generate_wireguard_keys", {
         misc.write_file("/tmp/oasis/wireguard_server_public_key", server_public_key)
         misc.write_file("/tmp/oasis/wireguard_client_public_key", client_public_key)
 
-        -- Secret Key
-        misc.write_file("/tmp/oasis/wireguard_server_secret_key", server_secret_key)
-        misc.write_file("/tmp/oasis/wireguard_client_secret_key", client_secret_key)
+        -- Private Key
+        misc.write_file("/tmp/oasis/wireguard_server_private_key", server_private_key)
+        misc.write_file("/tmp/oasis/wireguard_client_private_key", client_private_key)
 
         -- Pre-Shared Key
         misc.write_file("/tmp/oasis/wireguard_pre_shared_key", pre_shared_key)
@@ -135,8 +134,8 @@ server.tool("generate_wireguard_keys", {
         os.execute("chmod 600 /tmp/oasis/wireguard_server_public_key")
         os.execute("chmod 600 /tmp/oasis/wireguard_client_public_key")
         os.execute("chmod 600 /tmp/oasis/wireguard_pre_shared_key")
-        os.execute("chmod 600 /tmp/oasis/wireguard_secret_public_key")
-        os.execute("chmod 600 /tmp/oasis/wireguard_secret_public_key")
+        os.execute("chmod 600 /tmp/oasis/wireguard_server_private_key")
+        os.execute("chmod 600 /tmp/oasis/wireguard_client_private_key")
 
         return server.response(
             {
@@ -156,9 +155,8 @@ server.tool("setup_firewall_for_wireguard", {
     tool_desc   = "Set up WireGuard firewall rules",
 
     args_desc   = {
-        "Set virtual Interface name (ex: "vpn")",
-        "Set Wireguard Port (ex: "51820")"
-        ""
+        "Set virtual Interface name (ex: 'vpn')",
+        "Set Wireguard Port (ex: '51820')",
     },
 
     args = {
@@ -206,24 +204,89 @@ server.tool("setup_firewall_for_wireguard", {
         uci:set("firewall", "wg", "target", "ACCEPT")
         uci:commit("firewall")
 
+        -- cmd.restart_service("firewall")
         os.execute("/etc/init.d/firewall restart")
 
-        local res = server.response({ result = "xxxxxxxx" })
-        return res
+        return server.response(
+            {
+                result = "The firewall configuration for WireGuard has been completed.",
+                request = "As the next step, please prompt the user to specify the VPN Interface name, IPv4 address and IPv6 address.",
+                note = "If the tool setup_wireguard_network is enabled, you as the AI should be able to apply the VPN settings sepecified by user through executing this tool.",
+            }
+        )
     end
 })
 
 -- Network
 -- Reference URL:
--- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server?s%5B%5D=wireguard&s%5B%5D=vpn#network
+-- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server#network
 server.tool("setup_wireguard_network", {
-    args_desc   = { "xxxxxxxxxxxxxxxxx" },
-    args        = { data = "xxxxxxxxx" },
+    tool_desc   = "Configure WireGuard network interface and peer using system-generated keys",
 
-    tool_desc   = "xxxxxxxxxx",
+    args_desc   = {
+        "VPN interface name (ex: 'wg0')",
+        "VPN IPv4 address (ex: '10.0.0.1/24')",
+        "VPN IPv6 address (ex: 'fd00:10::1/64')"
+    },
+
+    args = {
+        vpn_if   = "a_string",
+        vpn_addr = "a_string",
+        vpn_addr6 = "a_string"
+    },
+
     call = function(args)
-        local res = server.response({ result = "xxxxxxxx" })
-        return res
+        local uci  = require("luci.model.uci").cursor()
+        local misc = require("oasis.chat.misc")
+
+        local private_key = misc.read_file("/tmp/oasis/wireguard_server_private_key")
+        local peer_pubkey = misc.read_file("/tmp/oasis/wireguard_client_public_key")
+        local peer_psk    = misc.read_file("/tmp/oasis/wireguard_pre_shared_key")
+
+        if not private_key or private_key == "" then
+            return server.response({ error = "Private key not found: " .. server_private_key_file })
+        end
+        if not peer_pubkey or peer_pubkey == "" then
+            return server.response({ error = "Peer public key not found: " .. client_public_key_file })
+        end
+        if not peer_psk or peer_psk == "" then
+            return server.response({ error = "Peer preshared key not found: " .. pre_shared_key_file })
+        end
+
+        local listen_port = uci:get("firewall", "wg", "dest_port", port)
+
+        -- IPv4 Client Address Calculation (e.g., 10.0.0.1/24 → 10.0.0.2/32)
+        local client_ipv4 = args.vpn_addr:gsub("(%d+)%.(%d+)%.(%d+)%.(%d+)(/%d+)", "%1.%2.%3.2/32")
+
+        -- IPv6 Client Address Calculation (e.g., fd00:10::1/64 → fd00:10::2/128)
+        local client_ipv6 = args.vpn_addr6:gsub("::%x+/%d+", "::2/128")
+
+        -- VPN Interface
+        uci:delete("network", args.vpn_if)
+        uci:set("network", args.vpn_if, "interface")
+        uci:set("network", args.vpn_if, "proto", "wireguard")
+        uci:set("network", args.vpn_if, "private_key", private_key)
+        uci:set("network", args.vpn_if, "listen_port", tonumber(listen_port))
+        uci:add_list("network", args.vpn_if, "addresses", args.vpn_addr)
+        uci:add_list("network", args.vpn_if, "addresses", args.vpn_addr6)
+
+        -- Peer
+        uci:delete("network", "wgclient")
+        uci:set("network", "wgclient", "wireguard_" .. args.vpn_if)
+        uci:set("network", "wgclient", "public_key", peer_pubkey)
+        uci:set("network", "wgclient", "preshared_key", peer_psk)
+        uci:add_list("network", "wgclient", "allowed_ips", client_ipv4)
+        uci:add_list("network", "wgclient", "allowed_ips", client_ipv6)
+
+        uci:commit("network")
+
+        -- cmd.restart_service_after_10s("network")
+        os.execute("/etc/init.d/network restart")
+
+        return server.response({
+            result = "WireGuard interface '" .. args.vpn_if .. "' configured successfully with IPv4 " .. args.vpn_addr .. " and IPv6 " .. args.vpn_addr6 .. ".",
+            request = "Please verify peer connectivity and ensure firewall rules are configured."
+        })
     end
 })
 
