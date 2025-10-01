@@ -238,19 +238,36 @@ server.tool("setup_wireguard_network", {
         uci:set("network", args.vpn_if, "proto", "wireguard")
         uci:set("network", args.vpn_if, "private_key", private_key)
         uci:set("network", args.vpn_if, "listen_port", tonumber(listen_port))
-        uci:add_list("network", args.vpn_if, "addresses", args.vpn_addr)
-        uci:add_list("network", args.vpn_if, "addresses", args.vpn_addr6)
+        -- manage addresses list (uci:add_list equivalent)
+        local addr_list = uci:get_list("network", args.vpn_if, "addresses") or {}
+        -- remove duplicates if present
+        for i = #addr_list, 1, -1 do
+            if addr_list[i] == args.vpn_addr or addr_list[i] == args.vpn_addr6 then
+                table.remove(addr_list, i)
+            end
+        end
+        addr_list[#addr_list + 1] = args.vpn_addr
+        addr_list[#addr_list + 1] = args.vpn_addr6
+        uci:set_list("network", args.vpn_if, "addresses", addr_list)
 
         uci:delete("network", "wgclient")
         uci:set("network", "wgclient", "wireguard_" .. args.vpn_if)
         uci:set("network", "wgclient", "public_key", peer_pubkey)
         uci:set("network", "wgclient", "preshared_key", peer_psk)
-        uci:add_list("network", "wgclient", "allowed_ips", client_ipv4)
-        uci:add_list("network", "wgclient", "allowed_ips", client_ipv6)
+        -- manage allowed_ips list (uci:add_list equivalent)
+        local allowed = uci:get_list("network", "wgclient", "allowed_ips") or {}
+        for i = #allowed, 1, -1 do
+            if allowed[i] == client_ipv4 or allowed[i] == client_ipv6 then
+                table.remove(allowed, i)
+            end
+        end
+        allowed[#allowed + 1] = client_ipv4
+        allowed[#allowed + 1] = client_ipv6
+        uci:set_list("network", "wgclient", "allowed_ips", allowed)
 
         uci:commit("network")
 
-        os.execute("/etc/init.d/network restart")
+        --os.execute("/etc/init.d/network restart")
 
         return server.response({
             result = "WireGuard interface '" .. args.vpn_if .. "' configured successfully with IPv4 " .. args.vpn_addr .. " and IPv6 " .. args.vpn_addr6 .. ".",
