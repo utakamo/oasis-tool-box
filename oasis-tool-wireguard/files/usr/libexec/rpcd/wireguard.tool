@@ -5,8 +5,8 @@ local server = require("oasis.local.tool.server")
 -- This AI tool facilitates the installation and configuration of WireGuard VPN.
 -- Its implementation is based on the official OpenWrt documentation referenced below.
 -- URL: https://openwrt.org/docs/guide-user/services/vpn/wireguard/server?s%5B%5D=wireguard&s%5B%5D=vpn
-server.tool("wireguard_user_manual", {
-    tool_desc   = "Read the instructions for setting up WireGuard.",
+server.tool("wireguard_manual_for_ai", {
+    tool_desc   = "Read the instructions for setting up WireGuard. If user asks about introduction or configuration of WireGuard, Please read this first.",
     call = function()
         return server.response({
             install_and_setup_manual = {
@@ -20,7 +20,8 @@ server.tool("wireguard_user_manual", {
                 "Step 4: \nUse the tool named \"setup_wireguard_network\" to create the WireGuard network interface (VPN_IF) with IPv4 (VPN_ADDR) and IPv6 (VPN_ADDR6) addresses, and register the peer configuration (public key, preshared key, allowed IPs).\n\n"
             },
 
-            note = "If you're not aware of the tools required for each step, please ask the user to enable the relevant tools from the Tools tab."
+            note = "If you're not aware of the tools required for each step, please ask the user to enable the relevant tools from the Tools tab.",
+            caution = "The user doesn't understand tool names when they're mentioned, so there's no need to tell them the names of the tools. Just let them know what kind of question or requests they should make.",
         })
     end
 })
@@ -29,7 +30,7 @@ server.tool("wireguard_user_manual", {
 -- Reference URL:
 -- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server?s%5B%5D=wireguard&s%5B%5D=vpn#preparation
 server.tool("install_wireguard", {
-    tool_desc = "Install wireguard package (wireguard-tools or luci-proto-wireguard package)",
+    tool_desc = "Install wireguard package (wireguard-tools or luci-proto-wireguard package) [Step1]",
     args_desc = {
         "Set package type value [CLI Type (wireguard-tools) value: '0', WebUI Type (luci-proto-wireguard) value: '1']",
     },
@@ -87,12 +88,13 @@ server.tool("install_wireguard", {
 -- Reference URL:
 -- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server?s%5B%5D=wireguard&s%5B%5D=vpn#key_management
 server.tool("generate_wireguard_keys", {
-    tool_desc   = "Generate and setup wireguard private and pre-shared, public key.",
+    tool_desc   = "Generate and setup wireguard private and pre-shared, public key. [Step2]",
 
     call = function(args)
         local util  = require("luci.util")
         local misc  = require("oasis.chat.misc")
         local mgr   = require("oasis.local.tool.package.manager")
+        local mkd   = require("oasis.chat.markdown")
 
         if mgr.check_pkg_reboot_required("luci-proto-wireguard") then
             return server.response(
@@ -113,12 +115,12 @@ server.tool("generate_wireguard_keys", {
 
         local user_only = "Generate Key Success\n\n"
         user_only = user_only .. "Memo below keys.\n"
-        user_only = user_only .. "- WireGuard Server Public Key\n"
-        user_only = user_only .. "```\n" .. server_public_key .. "\n```"
-        user_only = user_only .. "- WireGuard Client Public Key\n"
-        user_only = user_only .. "```\n" .. client_public_key .. "\n```" 
-        user_only = user_only .. "- WireGuard Pre-shared Key\n"
-        user_only = user_only .. "```\n" .. pre_shared_key .. "\n```" 
+        user_only = user_only .. mkd.h3("WireGuard Server Public Key\n")
+        user_only = user_only .. mkd.codeblock(server_public_key)
+        user_only = user_only .. mkd.h3("WireGuard Client Public Key\n")
+        user_only = user_only .. mkd.codeblock(client_public_key) 
+        user_only = user_only .. mkd.h3("WireGuard Pre-shared Key\n")
+        user_only = user_only .. mkd.codeblock(pre_shared_key)
 
         -- generate key file for other tool use
 
@@ -155,7 +157,7 @@ server.tool("generate_wireguard_keys", {
 -- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server?s%5B%5D=wireguard&s%5B%5D=vpn#firewall
 server.tool("setup_firewall_for_wireguard", {
 
-    tool_desc   = "Set up WireGuard firewall rules",
+    tool_desc   = "Set up WireGuard firewall rules [Step3]",
 
     args_desc   = {
         "Set virtual Interface name (ex: 'vpn')",
@@ -224,7 +226,7 @@ server.tool("setup_firewall_for_wireguard", {
 -- Reference URL:
 -- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server#network
 server.tool("setup_wireguard_network", {
-    tool_desc   = "Configure WireGuard network interface and peer using system-generated keys",
+    tool_desc   = "Configure WireGuard network interface and peer using system-generated keys [Step4]",
 
     args_desc   = {
         "VPN interface name (ex: 'wg0')",
