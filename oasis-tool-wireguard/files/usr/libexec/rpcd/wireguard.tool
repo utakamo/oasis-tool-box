@@ -30,7 +30,7 @@ server.tool("install_wireguard", {
         "Set package type value [CLI version (wireguard-tools): '0', WebUI version (luci-proto-wireguard): '1']",
     },
     args = { pkg_type = "a_string"},
-    exec_msg = "Installing WireGuard Package. Please Wait ...",
+    exec_msg = "Please Wait ...",
     download_msg = "Installing The WireGuard Package",
     call = function(args)
         local mgr = require("oasis.local.tool.package.manager")
@@ -267,7 +267,7 @@ server.tool("setup_wireguard_network", {
 
         uci:commit("network")
 
-        --os.execute("/etc/init.d/network restart")
+        os.execute("/etc/init.d/network restart")
 
         return server.response({
             result = "WireGuard interface '" .. args.vpn_if .. "' configured successfully with IPv4 " .. args.vpn_addr .. " and IPv6 " .. args.vpn_addr6 .. ".",
