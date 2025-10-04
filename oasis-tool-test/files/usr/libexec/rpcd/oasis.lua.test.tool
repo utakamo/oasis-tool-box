@@ -69,7 +69,7 @@ server.tool("tool_test_G", {
 server.tool("tool_test_H", {
     tool_desc   = "This is Test H (restart_service)",
     call = function()
-        return server.response({ message = "Executed Test H.", restart_service = "network" })
+        return server.response({ message = "Executed Test H.", prepare_service_restart = "network" })
     end
 })
 
