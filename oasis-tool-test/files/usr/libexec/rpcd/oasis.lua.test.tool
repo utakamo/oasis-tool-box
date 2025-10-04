@@ -23,7 +23,7 @@ server.tool("tool_test_C", {
     call = function(args)
         local util = require("luci.util")
         util.exec("sleep 10")
-        return server.response({ messasge = "Executed Test C." })
+        return server.response({ message = "Executed Test C." })
     end
 })
 
@@ -34,7 +34,7 @@ server.tool("tool_test_D", {
     call = function()
         local util = require("luci.util")
         util.exec("sleep 10")
-        return server.response({ messasge = "Executed Test D." })
+        return server.response({ message = "Executed Test D." })
     end
 })
 
@@ -43,7 +43,7 @@ server.tool("tool_test_E", {
     call = function()
         local util = require("luci.util")
         util.exec("sleep 10")
-        return server.response({ messasge = "Executed Test E.", reboot = true })
+        return server.response({ message = "Executed Test E.", reboot = true })
     end
 })
 
@@ -54,7 +54,7 @@ server.tool("tool_test_F", {
     call = function()
         local util = require("luci.util")
         util.exec("sleep 10")
-        return server.response({ messasge = "Executed Test F.", reboot = true })
+        return server.response({ message = "Executed Test F.", reboot = true })
     end
 })
 
@@ -62,7 +62,14 @@ server.tool("tool_test_G", {
     tool_desc   = "This is Test G",
     call = function()
         local util = require("luci.util")
-        return server.response({ messasge = "Executed Test G.", user_only = "This is user only message." })
+        return server.response({ message = "Executed Test G.", user_only = "This is user only message." })
+    end
+})
+
+server.tool("tool_test_H", {
+    tool_desc   = "This is Test H (restart_service)",
+    call = function()
+        return server.response({ message = "Executed Test H.", restart_service = "network" })
     end
 })
 
