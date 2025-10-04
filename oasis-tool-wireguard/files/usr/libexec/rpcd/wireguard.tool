@@ -179,12 +179,11 @@ server.tool("setup_firewall_for_wireguard", {
         uci:set("firewall", "wg", "target", "ACCEPT")
         uci:commit("firewall")
 
-        os.execute("/etc/init.d/firewall restart")
-
         return server.response({
             result = "The firewall configuration for WireGuard has been completed.",
             request = "AI must prompt the user to specify the VPN interface name, IPv4 address, and IPv6 address for the next step. Do not mention tool names.",
             note = "If the tool for configuring the WireGuard network is enabled, AI should apply the VPN settings provided by the user.",
+            restart_service = "firewall",
         })
     end
 })
@@ -267,11 +266,10 @@ server.tool("setup_wireguard_network", {
 
         uci:commit("network")
 
-        os.execute("/etc/init.d/network restart")
-
         return server.response({
             result = "WireGuard interface '" .. args.vpn_if .. "' configured successfully with IPv4 " .. args.vpn_addr .. " and IPv6 " .. args.vpn_addr6 .. ".",
             request = "AI must instruct the user to verify peer connectivity and ensure firewall rules are properly configured. Do not mention tool names.",
+            restart_service = "network",
         })
     end
 })
