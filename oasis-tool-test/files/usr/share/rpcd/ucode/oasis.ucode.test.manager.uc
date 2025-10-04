@@ -62,9 +62,9 @@ server.tool("oasis.ucode.test.tool", "tool_test_O", {
 });
 
 server.tool("oasis.ucode.test.tool", "tool_test_P", {
-    tool_desc: "This is test P.",
+    tool_desc: "This is test P (restart_service).",
     call: function() {
-        return { message: "Execute Test P.", restart_service: "network" };
+        return { message: "Execute Test P.", prepare_service_restart: "network" };
     }
 });
 
