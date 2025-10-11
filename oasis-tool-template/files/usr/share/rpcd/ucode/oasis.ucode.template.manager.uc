@@ -3,8 +3,8 @@
 let ubus = require('ubus').connect();
 let server = require('oasis.local.tool.server');
 
-server.tool("oasis.ucode.template.tool1", "get_goodbye", {
-    tool_desc: "Return a fixed goodbye message.",
+server.tool("oasis.ucode.template.tool1", "say_goodbye", {
+    tool_desc: "Return a simple goodbye. No inputs.",
     call: function() {
         return { message: "Goodbye! This is a template tool." };
     }
