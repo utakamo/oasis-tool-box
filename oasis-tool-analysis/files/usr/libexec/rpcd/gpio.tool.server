@@ -2,12 +2,133 @@
 
 local server = require("oasis.local.tool.server")
 
+server.tool("install_gpiod_tool", {
+    tool_desc = "Install gpiod-tools package",
+    call = function(args)
+        local mgr = require("oasis.local.tool.package.manager")
+
+        local package   = "gpiod-tools"
+
+        if mgr.check_installed_pkg(package) then
+            return server.response({
+                result = "The " .. package .. " package is already installed.",
+            })
+        end
+
+        if not mgr.update_pkg_info("ipk") then
+            return server.response({ error = "Failed to update package information. Please check network status and inform the user if necessary." })
+        end
+
+        if not mgr.install_pkg(package) then
+            return server.response({ error = "Failed to install " .. package .. " package. Please inform the user of this error." })
+        end
+
+        return server.response({
+            result = "The " .. package .. " package has been installed successfully."
+        })
+    end
+})
+
 server.tool("gpioinfo", {
     tool_desc = "List the status and configuration details of each GPIO line associated with the specified GPIO chip.",
     call = function()
         local util = require("luci.util")
+        local mgr = require("oasis.local.tool.package.manager")
+        local mkd   = require("oasis.chat.markdown")
+
+        local function parse_gpioinfo_output(info)
+            local gpio_chips = {}
+            local current_chip = nil
+            
+            for line_str in info:gmatch("[^\n]+") do
+                -- Match lines like "gpiochip0 - 32 lines:"
+                local chip_name, line_count = line_str:match("^(gpiochip%d+)%s+-%s+(%d+)%s+lines:")
+                
+                if chip_name then
+                    current_chip = chip_name
+                    gpio_chips[current_chip] = {
+                        line_count = tonumber(line_count),
+                        lines = {}
+                    }
+                else
+                    -- Match lines like "line   0:       unnamed                 input" or
+                    -- "line   3:       unnamed                 output active-low consumer=white:wlan2g"
+                    local line_num, name, rest = line_str:match("line%s+(%d+):%s+(%S+)%s+(.*)")
+                    
+                    if line_num and current_chip then
+                        local mode, consumer = rest:match("^(%S+)%s+.*consumer=(.+)$")
+                        if not consumer then
+                            consumer = rest:match("consumer=(.+)$")
+                        end
+                        if not mode then
+                            mode = rest:match("^(%S+)")
+                        end
+                        
+                        gpio_chips[current_chip].lines[tonumber(line_num)] = {
+                            name = name,
+                            mode = mode,
+                            consumer = consumer or ""
+                        }
+                    end
+                end
+            end
+            
+            return gpio_chips
+        end
+
+        local function render_gpio_markdown(gpio_data)
+            local contents = {}
+            local chips = {}
+
+            for chip in pairs(gpio_data) do
+                table.insert(chips, chip)
+            end
+            table.sort(chips)
+
+            for _, chip in ipairs(chips) do
+                local chip_data = gpio_data[chip] or {}
+                table.insert(contents, mkd.h2(chip))
+
+                local rows = { { "Line", "Name", "Mode", "Consumer" } }
+
+                local line_numbers = {}
+                for line_num in pairs(chip_data.lines or {}) do
+                    table.insert(line_numbers, line_num)
+                end
+                table.sort(line_numbers)
+
+                for _, line_num in ipairs(line_numbers) do
+                    local info = chip_data.lines[line_num] or {}
+                    table.insert(rows, {
+                        tostring(line_num),
+                        tostring(info.name or ""),
+                        tostring(info.mode or ""),
+                        tostring(info.consumer or "")
+                    })
+                end
+
+                table.insert(contents, mkd.table(rows))
+            end
+
+            return table.concat(contents, "\n\n")
+        end
+
+        if not mgr.check_installed_pkg("gpiod-tools") then
+            return server.response({
+                result = "The gpiod-tools package is not installed.",
+            })
+        end
+
         local info = util.exec("gpioinfo")
-        local res = server.response({ result = info, request = "Display it in a table format using Markdown." })
+        local gpio_data = parse_gpioinfo_output(info)
+
+        local result = render_gpio_markdown(gpio_data)
+        local res = server.response(
+            {
+                result = result,
+                user_only = result,
+                request = "gpioinfo output has been retrieved. System notification to the user has already been completed. You are only required to provide a summary of the results." 
+            })
         return res
     end
 })
