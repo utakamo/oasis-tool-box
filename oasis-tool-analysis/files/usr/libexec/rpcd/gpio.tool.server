@@ -30,7 +30,7 @@ server.tool("install_gpiod_tool", {
 })
 
 server.tool("gpioinfo", {
-    tool_desc = "List the status and configuration details of each GPIO line associated with the specified GPIO chip.",
+    tool_desc = "gpioinfo command: List the status and configuration details of each GPIO line associated with the specified GPIO chip.",
     call = function()
         local util = require("luci.util")
         local mkd = require("oasis.chat.markdown")
@@ -131,7 +131,7 @@ server.tool("gpioinfo", {
 })
 
 server.tool("gpiodetect", {
-    tool_desc = "List the GPIO chips detected on the system and their metadata.",
+    tool_desc = "gpiodetect command: List the GPIO chips detected on the system and their metadata.",
     call = function()
         local util = require("luci.util")
         local mkd = require("oasis.chat.markdown")
