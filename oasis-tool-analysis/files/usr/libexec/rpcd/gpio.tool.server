@@ -130,4 +130,60 @@ server.tool("gpioinfo", {
     end
 })
 
+server.tool("gpiodetect", {
+    tool_desc = "List the GPIO chips detected on the system and their metadata.",
+    call = function()
+        local util = require("luci.util")
+        local mkd = require("oasis.chat.markdown")
+        local mgr = require("oasis.local.tool.package.manager")
+
+        if not mgr.check_installed_pkg("gpiod-tools") then
+            return server.response({
+                result = "The gpiod-tools package is not installed.",
+            })
+        end
+
+        local function parse_gpiodetect_output(output)
+            local chips = {}
+
+            for line in tostring(output or ""):gmatch("[^\n]+") do
+                local chip, label, lines = line:match("^(gpiochip%d+)%s+%[(.-)%]%s+%((%d+)%s+lines?%)")
+                if chip then
+                    table.insert(chips, {
+                        chip = chip,
+                        label = label or "",
+                        lines = tonumber(lines) or 0
+                    })
+                end
+            end
+
+            return chips
+        end
+
+        local output = util.exec("gpiodetect")
+        local chips = parse_gpiodetect_output(output)
+
+        if #chips == 0 then
+            return server.response({
+                result = "No GPIO chips were detected on this device.",
+                user_only = output,
+                request = "GPIO chip list retrieval returned no entries. Advise the user to verify hardware connectivity."
+            })
+        end
+
+        local rows = { { "Chip", "Label", "Lines" } }
+        for _, chip in ipairs(chips) do
+            table.insert(rows, { chip.chip, chip.label, tostring(chip.lines) })
+        end
+
+        local markdown = mkd.table(rows)
+
+        return server.response({
+            result = markdown,
+            user_only = output,
+            request = "GPIO chip summary retrieved. Provide a concise overview of available chips to the user."
+        })
+    end
+})
+
 server.run(arg)
