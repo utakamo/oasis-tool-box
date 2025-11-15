@@ -12,7 +12,7 @@ define Package/oasis-tool-analysis
     CATEGORY:=utakamo
     SECTION:=utakamo
     TITLE:= Oasis Local Tool Server Analysis Package
-    DEPENDS:=+oasis-mod-tool +gpiod-tools
+    DEPENDS:=+oasis-mod-tool
     PKGARCH:=all
 endef
 
