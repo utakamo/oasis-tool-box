@@ -41,7 +41,7 @@ server.tool("gpioinfo", {
             local current_chip = nil
             
             for line_str in info:gmatch("[^\n]+") do
-                -- Match lines like "gpiochip0 - 32 lines:"
+                -- "gpiochip0 - 32 lines:" のような行をマッチ
                 local chip_name, line_count = line_str:match("^(gpiochip%d+)%s+-%s+(%d+)%s+lines:")
                 
                 if chip_name then
@@ -51,7 +51,7 @@ server.tool("gpioinfo", {
                         lines = {}
                     }
                 else
-                    -- Match lines like "line   0:       unnamed                 input" or
+                    -- "line   0:       unnamed                 input" または
                     -- "line   3:       unnamed                 output active-low consumer=white:wlan2g"
                     local line_num, name, rest = line_str:match("line%s+(%d+):%s+(%S+)%s+(.*)")
                     
@@ -79,6 +79,7 @@ server.tool("gpioinfo", {
         local function render_gpio_markdown(gpio_data)
             local contents = {}
             local chips = {}
+            local global_line_index = 0
 
             for chip in pairs(gpio_data) do
                 table.insert(chips, chip)
@@ -100,11 +101,12 @@ server.tool("gpioinfo", {
                 for _, line_num in ipairs(line_numbers) do
                     local info = chip_data.lines[line_num] or {}
                     table.insert(rows, {
-                        tostring(line_num),
+                        tostring(global_line_index),
                         tostring(info.name or ""),
                         tostring(info.mode or ""),
                         tostring(info.consumer or "")
                     })
+                    global_line_index = global_line_index + 1
                 end
 
                 table.insert(contents, mkd.table(rows))
@@ -123,8 +125,7 @@ server.tool("gpioinfo", {
         local gpio_data = parse_gpioinfo_output(info)
 
         local result = render_gpio_markdown(gpio_data)
-        local res = server.response(
-            {
+        local res = server.response({
                 result = result,
                 user_only = result,
                 request = "gpioinfo output has been retrieved. System notification to the user has already been completed. You are only required to provide a summary of the results." 
