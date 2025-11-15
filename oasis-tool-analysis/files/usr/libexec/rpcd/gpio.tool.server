@@ -33,17 +33,22 @@ server.tool("gpioinfo", {
     tool_desc = "List the status and configuration details of each GPIO line associated with the specified GPIO chip.",
     call = function()
         local util = require("luci.util")
+        local mkd = require("oasis.chat.markdown")
         local mgr = require("oasis.local.tool.package.manager")
-        local mkd   = require("oasis.chat.markdown")
+
+        if not mgr.check_installed_pkg("gpiod-tools") then
+            return server.response({
+                result = "The gpiod-tools package is not installed.",
+            })
+        end
 
         local function parse_gpioinfo_output(info)
             local gpio_chips = {}
             local current_chip = nil
-            
-            for line_str in info:gmatch("[^\n]+") do
-                -- "gpiochip0 - 32 lines:" のような行をマッチ
+
+            for line_str in tostring(info or ""):gmatch("[^\n]+") do
                 local chip_name, line_count = line_str:match("^(gpiochip%d+)%s+-%s+(%d+)%s+lines:")
-                
+
                 if chip_name then
                     current_chip = chip_name
                     gpio_chips[current_chip] = {
@@ -51,10 +56,8 @@ server.tool("gpioinfo", {
                         lines = {}
                     }
                 else
-                    -- "line   0:       unnamed                 input" または
-                    -- "line   3:       unnamed                 output active-low consumer=white:wlan2g"
                     local line_num, name, rest = line_str:match("line%s+(%d+):%s+(%S+)%s+(.*)")
-                    
+
                     if line_num and current_chip then
                         local mode, consumer = rest:match("^(%S+)%s+.*consumer=(.+)$")
                         if not consumer then
@@ -63,7 +66,7 @@ server.tool("gpioinfo", {
                         if not mode then
                             mode = rest:match("^(%S+)")
                         end
-                        
+
                         gpio_chips[current_chip].lines[tonumber(line_num)] = {
                             name = name,
                             mode = mode,
@@ -72,7 +75,7 @@ server.tool("gpioinfo", {
                     end
                 end
             end
-            
+
             return gpio_chips
         end
 
@@ -81,7 +84,7 @@ server.tool("gpioinfo", {
             local chips = {}
             local global_line_index = 0
 
-            for chip in pairs(gpio_data) do
+            for chip in pairs(gpio_data or {}) do
                 table.insert(chips, chip)
             end
             table.sort(chips)
@@ -115,39 +118,15 @@ server.tool("gpioinfo", {
             return table.concat(contents, "\n\n")
         end
 
-        if not mgr.check_installed_pkg("gpiod-tools") then
-            return server.response({
-                result = "The gpiod-tools package is not installed.",
-            })
-        end
-
         local info = util.exec("gpioinfo")
         local gpio_data = parse_gpioinfo_output(info)
 
         local result = render_gpio_markdown(gpio_data)
-        local res = server.response({
-                result = result,
-                user_only = result,
-                request = "gpioinfo output has been retrieved. System notification to the user has already been completed. You are only required to provide a summary of the results." 
-            })
-        return res
-    end
-})
-
-server.tool("xxxxxx", {
-    tool_desc = "xxxxxxx",
-
-    args_desc = {
-        "argument 1 description",
-        "argument 2 description",
-    },
-
-    args = { arg1 = "a_string", arg2 = "a_string" },
-
-    call = function(args)
-        -- something process
-        local res = server.response({ result = "xxxxxx" })
-        return res
+        return server.response({
+            result = result,
+            user_only = result,
+            request = "gpioinfo output has been retrieved. System notification to the user has already been completed. You are only required to provide a summary of the results."
+        })
     end
 })
 
