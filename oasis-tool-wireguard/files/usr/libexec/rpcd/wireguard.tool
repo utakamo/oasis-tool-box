@@ -234,7 +234,13 @@ server.tool("setup_wireguard_network", {
             return server.response({ error = "Peer pre-shared key not found: " .. pre_shared_key_file .. ". Please tell the user to generate the keys first." })
         end
 
-        local listen_port = uci:get("firewall", "wg", "dest_port", port)
+        local listen_port = tonumber(uci:get("firewall", "wg", "dest_port"))
+        if not listen_port then
+            return server.response({
+                error = "WireGuard listen port is not set. Please run firewall setup first.",
+                request = "AI must ask the user to run the WireGuard firewall setup step before configuring the network.",
+            })
+        end
 
         local client_ipv4 = args.vpn_addr:gsub("(%d+)%.(%d+)%.(%d+)%.(%d+)(/%d+)", "%1.%2.%3.2/32")
         local client_ipv6 = args.vpn_addr6:gsub("::%x+/%d+", "::2/128")
@@ -243,7 +249,7 @@ server.tool("setup_wireguard_network", {
         uci:set("network", args.vpn_if, "interface")
         uci:set("network", args.vpn_if, "proto", "wireguard")
         uci:set("network", args.vpn_if, "private_key", private_key)
-        uci:set("network", args.vpn_if, "listen_port", tonumber(listen_port))
+        uci:set("network", args.vpn_if, "listen_port", listen_port)
         -- manage addresses list (uci:add_list equivalent)
         local addr_list = uci:get_list("network", args.vpn_if, "addresses") or {}
         -- remove duplicates if present
