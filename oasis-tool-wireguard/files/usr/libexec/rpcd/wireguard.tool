@@ -149,6 +149,13 @@ server.tool("setup_firewall_for_wireguard", {
 
     call = function(args)
         local uci = require("luci.model.uci").cursor()
+        local vif = args.vif
+
+        if type(vif) ~= "string" or vif:match("^%s*$") then
+            return server.response({
+                error = "Invalid virtual interface name. Please provide a non-empty interface name (e.g., 'wg0').",
+            })
+        end
 
         local port = tonumber(args.port)
 
@@ -161,13 +168,13 @@ server.tool("setup_firewall_for_wireguard", {
         os.execute("uci rename firewall.@zone[0]=lan")
         os.execute("uci rename firewall.@zone[1]=wan")
 
-        local lan_list = uci:get_list("firewall", "lan", "network")
-        for idx, val in ipairs(lan_list) do
-            if val == args.vpn then
-                table.remove(lan_list, idx)
+        local lan_list = uci:get_list("firewall", "lan", "network") or {}
+        for i = #lan_list, 1, -1 do
+            if lan_list[i] == vif then
+                table.remove(lan_list, i)
             end
         end
-        lan_list[#lan_list + 1] = args.vpn
+        lan_list[#lan_list + 1] = vif
         uci:set_list("firewall", "lan", "network", lan_list)
 
         uci:delete("firewall", "wg")
