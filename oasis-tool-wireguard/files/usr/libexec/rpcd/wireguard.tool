@@ -86,6 +86,29 @@ server.tool("generate_wireguard_keys", {
         local mgr   = require("oasis.local.tool.package.manager")
         local mkd   = require("oasis.chat.markdown")
 
+        local function run_wg(cmd)
+            local raw = util.exec(cmd .. " 2>/dev/null; printf '\\n__OASIS_RC__:%d' $?")
+            if type(raw) ~= "string" then
+                return nil, "Failed to execute command: " .. cmd
+            end
+
+            local body, rc = raw:match("^(.*)\n__OASIS_RC__:(%d+)$")
+            if not body or not rc then
+                return nil, "Failed to parse command result: " .. cmd
+            end
+
+            if tonumber(rc) ~= 0 then
+                return nil, "Command failed: " .. cmd
+            end
+
+            body = body:gsub("%s+$", "")
+            if body == "" then
+                return nil, "Command returned empty output: " .. cmd
+            end
+
+            return body
+        end
+
         if mgr.check_pkg_reboot_required("luci-proto-wireguard") then
             return server.response({
                 error = "A system reboot is required after installing luci-proto-wireguard. Please tell the user to reboot the system before proceeding.",
@@ -93,13 +116,34 @@ server.tool("generate_wireguard_keys", {
             })
         end
 
-        local server_private_key = util.exec("wg genkey"):gsub("\n$", "")
-        local server_public_key  = util.exec("echo " .. server_private_key .. " | wg pubkey"):gsub("\n$", "")
+        local server_private_key, err = run_wg("wg genkey")
+        if not server_private_key then
+            return server.response({ error = err })
+        end
 
-        local client_private_key = util.exec("wg genkey"):gsub("\n$", "")
-        local client_public_key  = util.exec("echo " .. client_private_key .. " | wg pubkey"):gsub("\n$", "")
+        local server_public_key
+        server_public_key, err = run_wg("echo " .. server_private_key .. " | wg pubkey")
+        if not server_public_key then
+            return server.response({ error = err })
+        end
 
-        local pre_shared_key = util.exec("wg genpsk"):gsub("\n$", "")
+        local client_private_key
+        client_private_key, err = run_wg("wg genkey")
+        if not client_private_key then
+            return server.response({ error = err })
+        end
+
+        local client_public_key
+        client_public_key, err = run_wg("echo " .. client_private_key .. " | wg pubkey")
+        if not client_public_key then
+            return server.response({ error = err })
+        end
+
+        local pre_shared_key
+        pre_shared_key, err = run_wg("wg genpsk")
+        if not pre_shared_key then
+            return server.response({ error = err })
+        end
 
         local user_only = "Key generation successful.\n\n"
         user_only = user_only .. "Please make a note of the following keys.\n"
