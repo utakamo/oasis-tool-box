@@ -1,0 +1,103 @@
+{
+  "source_path": "/usr/libexec/rpcd/oasis.lua.test.tool",
+  "source_type": "lua_script",
+  "tools": [
+    {
+      "additional_properties": false,
+      "description": "This is Test A",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_A",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test B",
+      "download_message": "",
+      "execution_message": "Test B Execute",
+      "name": "tool_test_B",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test C",
+      "download_message": "Downloading Test ... ",
+      "execution_message": "",
+      "name": "tool_test_C",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test D",
+      "download_message": "Downloading Test ... ",
+      "execution_message": "Execute Test D",
+      "name": "tool_test_D",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test E",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_E",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test F",
+      "download_message": "Downloading Test ...",
+      "execution_message": "Executed Test F",
+      "name": "tool_test_F",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test G",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_G",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is Test H (restart_service)",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_H",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.test.tool",
+      "timeout": "",
+      "type": "function"
+    }
+  ],
+  "version": 1
+}

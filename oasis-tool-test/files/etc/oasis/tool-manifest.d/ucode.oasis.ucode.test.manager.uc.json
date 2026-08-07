@@ -1,0 +1,103 @@
+{
+  "source_path": "/usr/share/rpcd/ucode/oasis.ucode.test.manager.uc",
+  "source_type": "ucode_script",
+  "tools": [
+    {
+      "additional_properties": false,
+      "description": "This is test I.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_I",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test J.",
+      "download_message": "",
+      "execution_message": "Execute Test J",
+      "name": "tool_test_J",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test K.",
+      "download_message": "Downloading Test ...",
+      "execution_message": "",
+      "name": "tool_test_K",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test L.",
+      "download_message": "Downloading Test ...",
+      "execution_message": "Execute Test L",
+      "name": "tool_test_L",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test M.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_M",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test N.",
+      "download_message": "Downloading Test ...",
+      "execution_message": "Execute Test N",
+      "name": "tool_test_N",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test O.",
+      "download_message": "Downloading Test ...",
+      "execution_message": "Execute Test O",
+      "name": "tool_test_O",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "This is test P (restart_service).",
+      "download_message": "",
+      "execution_message": "",
+      "name": "tool_test_P",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.test.tool",
+      "timeout": "",
+      "type": "function"
+    }
+  ],
+  "version": 1
+}

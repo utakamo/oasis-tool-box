@@ -1,0 +1,71 @@
+{
+  "source_path": "/usr/share/rpcd/ucode/oasis.ucode.template.manager.uc",
+  "source_type": "ucode_script",
+  "tools": [
+    {
+      "additional_properties": false,
+      "description": "Return a simple goodbye. No inputs.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "say_goodbye",
+      "properties": [],
+      "required": [],
+      "server": "oasis.ucode.template.tool1",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Subtract the second number from the first and return the result.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "subtract",
+      "properties": [
+        {
+          "description": "First number (integer)",
+          "name": "num1",
+          "type": "number"
+        },
+        {
+          "description": "Second number (integer)",
+          "name": "num2",
+          "type": "number"
+        }
+      ],
+      "required": [
+        "num1",
+        "num2"
+      ],
+      "server": "oasis.ucode.template.tool1",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Concatenate two strings and return the result.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "concat_strings",
+      "properties": [
+        {
+          "description": "First string",
+          "name": "str1",
+          "type": "string"
+        },
+        {
+          "description": "Second string",
+          "name": "str2",
+          "type": "string"
+        }
+      ],
+      "required": [
+        "str1",
+        "str2"
+      ],
+      "server": "oasis.ucode.template.tool2",
+      "timeout": "",
+      "type": "function"
+    }
+  ],
+  "version": 1
+}

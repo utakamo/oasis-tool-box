@@ -1,0 +1,109 @@
+{
+  "source_path": "/usr/libexec/rpcd/wireguard.tool",
+  "source_type": "lua_script",
+  "tools": [
+    {
+      "additional_properties": false,
+      "description": "Generate and set up WireGuard private, public, and pre-shared keys. [Step 2]",
+      "download_message": "",
+      "execution_message": "",
+      "name": "generate_wireguard_keys",
+      "properties": [],
+      "required": [],
+      "server": "wireguard.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Install the WireGuard package (wireguard-tools or luci-proto-wireguard package) [Step 1]",
+      "download_message": "Installing The WireGuard Package",
+      "execution_message": "Please Wait ...",
+      "name": "install_wireguard",
+      "properties": [
+        {
+          "description": "Set package type value [CLI version (wireguard-tools): '0', WebUI version (luci-proto-wireguard): '1']",
+          "name": "pkg_type",
+          "type": "string"
+        }
+      ],
+      "required": [
+        "pkg_type"
+      ],
+      "server": "wireguard.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Set up WireGuard firewall rules [Step 3]",
+      "download_message": "",
+      "execution_message": "",
+      "name": "setup_firewall_for_wireguard",
+      "properties": [
+        {
+          "description": "Set the WireGuard port (e.g., '51820')",
+          "name": "port",
+          "type": "string"
+        },
+        {
+          "description": "Set the virtual interface name (e.g., 'vpn')",
+          "name": "vif",
+          "type": "string"
+        }
+      ],
+      "required": [
+        "port",
+        "vif"
+      ],
+      "server": "wireguard.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Configure the WireGuard network interface and peer using system-generated keys [Step 4]",
+      "download_message": "",
+      "execution_message": "",
+      "name": "setup_wireguard_network",
+      "properties": [
+        {
+          "description": "VPN IPv4 address (e.g., '10.0.0.1/24')",
+          "name": "vpn_addr",
+          "type": "string"
+        },
+        {
+          "description": "VPN IPv6 address (e.g., 'fd00:10::1/64')",
+          "name": "vpn_addr6",
+          "type": "string"
+        },
+        {
+          "description": "VPN interface name (e.g., 'wg0')",
+          "name": "vpn_if",
+          "type": "string"
+        }
+      ],
+      "required": [
+        "vpn_addr",
+        "vpn_addr6",
+        "vpn_if"
+      ],
+      "server": "wireguard.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Read the instructions for setting up WireGuard. If the user asks about introduction or configuration of WireGuard, please read this first.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "wireguard_manual_for_ai",
+      "properties": [],
+      "required": [],
+      "server": "wireguard.tool",
+      "timeout": "",
+      "type": "function"
+    }
+  ],
+  "version": 1
+}

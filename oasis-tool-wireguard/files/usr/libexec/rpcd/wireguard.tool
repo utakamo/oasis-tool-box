@@ -181,9 +181,10 @@ server.tool("generate_wireguard_keys", {
 server.tool("setup_firewall_for_wireguard", {
 
     tool_desc   = "Set up WireGuard firewall rules [Step 3]",
+    -- Manifest generation maps descriptions in sorted argument-name order.
     args_desc   = {
-        "Set the virtual interface name (e.g., 'vpn')",
         "Set the WireGuard port (e.g., '51820')",
+        "Set the virtual interface name (e.g., 'vpn')",
     },
 
     args = {
@@ -244,10 +245,11 @@ server.tool("setup_firewall_for_wireguard", {
 -- https://openwrt.org/docs/guide-user/services/vpn/wireguard/server#network
 server.tool("setup_wireguard_network", {
     tool_desc   = "Configure the WireGuard network interface and peer using system-generated keys [Step 4]",
+    -- Manifest generation maps descriptions in sorted argument-name order.
     args_desc   = {
-        "VPN interface name (e.g., 'wg0')",
         "VPN IPv4 address (e.g., '10.0.0.1/24')",
-        "VPN IPv6 address (e.g., 'fd00:10::1/64')"
+        "VPN IPv6 address (e.g., 'fd00:10::1/64')",
+        "VPN interface name (e.g., 'wg0')"
     },
 
     args = {
