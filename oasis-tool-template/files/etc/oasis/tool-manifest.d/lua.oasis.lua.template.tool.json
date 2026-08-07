@@ -1,0 +1,65 @@
+{
+  "source_path": "/usr/libexec/rpcd/oasis.lua.template.tool",
+  "source_type": "lua_script",
+  "tools": [
+    {
+      "additional_properties": false,
+      "description": "Add two numbers together and return the result.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "add_numbers",
+      "properties": [
+        {
+          "description": "First number",
+          "name": "num1",
+          "type": "string"
+        },
+        {
+          "description": "Second number",
+          "name": "num2",
+          "type": "string"
+        }
+      ],
+      "required": [
+        "num1",
+        "num2"
+      ],
+      "server": "oasis.lua.template.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Get current temperature for a given location.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "get_weather",
+      "properties": [
+        {
+          "description": "City and country e.g. Bogotá, Colombia",
+          "name": "location",
+          "type": "string"
+        }
+      ],
+      "required": [
+        "location"
+      ],
+      "server": "oasis.lua.template.tool",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Return a simple greeting. No inputs.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "say_hello",
+      "properties": [],
+      "required": [],
+      "server": "oasis.lua.template.tool",
+      "timeout": "",
+      "type": "function"
+    }
+  ],
+  "version": 1
+}

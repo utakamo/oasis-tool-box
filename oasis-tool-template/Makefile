@@ -2,10 +2,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=oasis-tool-template
 PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 LUA_OLT_SERVER_DIR=/usr/libexec/rpcd
 UCODE_OLT_SERVER_DIR=/usr/share/rpcd/ucode
+OASIS_MANIFEST_DIR=/etc/oasis/tool-manifest.d
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,8 +24,10 @@ endef
 define Package/oasis-tool-template/install
 	$(INSTALL_DIR) $(1)$(LUA_OLT_SERVER_DIR)
 	$(INSTALL_DIR) $(1)$(UCODE_OLT_SERVER_DIR)
+	$(INSTALL_DIR) $(1)$(OASIS_MANIFEST_DIR)
 	$(INSTALL_BIN) ./files/usr/libexec/rpcd/oasis.lua.template.tool $(1)$(LUA_OLT_SERVER_DIR)
 	$(INSTALL_DATA) ./files/usr/share/rpcd/ucode/oasis.ucode.template.manager.uc $(1)$(UCODE_OLT_SERVER_DIR)
+	$(INSTALL_DATA) ./files/etc/oasis/tool-manifest.d/*.json $(1)$(OASIS_MANIFEST_DIR)/
 endef
 
 $(eval $(call BuildPackage,oasis-tool-template))

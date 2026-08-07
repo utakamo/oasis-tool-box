@@ -1,0 +1,43 @@
+{
+  "source_path": "/usr/libexec/rpcd/gpio.tool.server",
+  "source_type": "lua_script",
+  "tools": [
+    {
+      "additional_properties": false,
+      "description": "gpiodetect command: List the GPIO chips detected on the system and their metadata.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "gpiodetect",
+      "properties": [],
+      "required": [],
+      "server": "gpio.tool.server",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "gpioinfo command: List the status and configuration details of each GPIO line associated with the specified GPIO chip.",
+      "download_message": "",
+      "execution_message": "",
+      "name": "gpioinfo",
+      "properties": [],
+      "required": [],
+      "server": "gpio.tool.server",
+      "timeout": "",
+      "type": "function"
+    },
+    {
+      "additional_properties": false,
+      "description": "Install gpiod-tools package",
+      "download_message": "",
+      "execution_message": "",
+      "name": "install_gpiod_tool",
+      "properties": [],
+      "required": [],
+      "server": "gpio.tool.server",
+      "timeout": "",
+      "type": "function"
+    }
+  ],
+  "version": 1
+}
